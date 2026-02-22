@@ -1,6 +1,5 @@
 package backend.academy.linktracker.bot.commands;
 
-import backend.academy.linktracker.bot.CommandType;
 import backend.academy.linktracker.bot.repository.UserRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;

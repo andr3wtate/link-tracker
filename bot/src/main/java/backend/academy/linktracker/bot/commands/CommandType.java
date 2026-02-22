@@ -1,4 +1,4 @@
-package backend.academy.linktracker.bot;
+package backend.academy.linktracker.bot.commands;
 
 import lombok.Getter;
 

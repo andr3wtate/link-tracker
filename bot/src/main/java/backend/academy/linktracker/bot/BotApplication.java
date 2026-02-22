@@ -1,6 +1,7 @@
 package backend.academy.linktracker.bot;
 
 import backend.academy.linktracker.bot.commands.Command;
+import backend.academy.linktracker.bot.commands.CommandType;
 import backend.academy.linktracker.bot.commands.HelpCommand;
 import backend.academy.linktracker.bot.commands.StartCommand;
 import backend.academy.linktracker.bot.repository.UserRepository;
