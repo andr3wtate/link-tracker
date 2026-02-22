@@ -15,7 +15,7 @@ public enum CommandType {
     private final String description;
 
     private static final Map<String, CommandType> mapping =
-            Arrays.stream(CommandType.values()).collect(Collectors.toMap(CommandType::getName, Function.identity()));
+            Arrays.stream(values()).collect(Collectors.toMap(CommandType::getName, Function.identity()));
 
     CommandType(String name, String description) {
         this.name = name;
