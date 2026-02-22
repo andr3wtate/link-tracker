@@ -51,3 +51,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+bot/token.env
+logs/
