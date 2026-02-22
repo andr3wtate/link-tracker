@@ -46,7 +46,7 @@ public class BotApplication {
                                 .map(MessageEntity::type)
                                 .toList()
                                 .contains(MessageEntity.Type.bot_command)) {
-                    CommandType commandType = searchCommandByName(message.text());
+                    CommandType commandType = CommandType.getCommand(message.text());
                     if (commandType == null) {
                         telegramBot.execute(
                                 new SendMessage(
@@ -62,15 +62,6 @@ public class BotApplication {
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
-    }
-
-    private CommandType searchCommandByName(String command) {
-        for (CommandType c : CommandType.values()) {
-            if (c.getName().equals(command)) {
-                return c;
-            }
-        }
-        return null;
     }
 
     private Command getCommand(CommandType commandType, long chatId, long userId) {
