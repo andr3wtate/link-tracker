@@ -4,7 +4,7 @@ import backend.academy.linktracker.bot.commands.Command;
 import backend.academy.linktracker.bot.commands.CommandType;
 import backend.academy.linktracker.bot.commands.HelpCommand;
 import backend.academy.linktracker.bot.commands.StartCommand;
-import backend.academy.linktracker.bot.repository.UserRepository;
+import backend.academy.linktracker.bot.repository.BotRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
@@ -23,10 +23,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @Slf4j
 public class BotApplication {
     private final TelegramBot telegramBot;
-    private final UserRepository repository;
+    private final BotRepository repository;
 
-    @Autowired
-    BotApplication(TelegramBot telegramBot, UserRepository repository) {
+    BotApplication(TelegramBot telegramBot, BotRepository repository) {
         this.telegramBot = telegramBot;
         this.repository = repository;
     }
