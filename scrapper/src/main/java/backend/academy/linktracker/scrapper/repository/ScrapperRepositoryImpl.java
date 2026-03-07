@@ -1,24 +1,24 @@
 package backend.academy.linktracker.scrapper.repository;
 
-import backend.academy.linktracker.scrapper.dto.AddLink;
-import backend.academy.linktracker.scrapper.dto.Link;
-import backend.academy.linktracker.scrapper.dto.RemoveLink;
+import backend.academy.linktracker.commondto.AddLink;
+import backend.academy.linktracker.commondto.Link;
+import backend.academy.linktracker.commondto.RemoveLink;
 import org.springframework.stereotype.Repository;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class ScrapperRepositoryImpl implements ScrapperRepository {
-    private final Map<Long, List<Link>> chatToLinks = new HashMap<>();
+    private final Map<Long, List<Link>> chatToLinks = new ConcurrentHashMap<>();
 
     // link URI -> chatIds that track it
     // also contains all unique links
-    private final Map<URI, Set<Long>> linkToChats = new HashMap<>();
+    private final Map<URI, Set<Long>> linkToChats = new ConcurrentHashMap<>();
 
     private long linkNumber = 0;
 
@@ -57,7 +57,7 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
 
     @Override
     public Link addLinkByChatId(long chatId, AddLink newLink) {
-        Link link = new Link(linkNumber++, newLink.link(), newLink.tags(), newLink.filters());
+        Link link = new Link(linkNumber++, newLink.link(), newLink.tags());
         chatToLinks.get(chatId).add(link);
         if (!linkToChats.containsKey(link.url())) {
             linkToChats.put(link.url(), new HashSet<>());

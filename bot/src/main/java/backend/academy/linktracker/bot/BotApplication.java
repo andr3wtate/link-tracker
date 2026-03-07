@@ -2,9 +2,8 @@ package backend.academy.linktracker.bot;
 
 import backend.academy.linktracker.bot.commands.Command;
 import backend.academy.linktracker.bot.commands.CommandType;
-import backend.academy.linktracker.bot.commands.HelpCommand;
-import backend.academy.linktracker.bot.commands.StartCommand;
 import backend.academy.linktracker.bot.repository.BotRepository;
+import backend.academy.linktracker.bot.repository.BotState;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Message;
@@ -12,8 +11,10 @@ import com.pengrad.telegrambot.model.MessageEntity;
 import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -24,10 +25,14 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 public class BotApplication {
     private final TelegramBot telegramBot;
     private final BotRepository repository;
+    private final Map<CommandType, Command> getCommand;
 
-    BotApplication(TelegramBot telegramBot, BotRepository repository) {
+    BotApplication(TelegramBot telegramBot, BotRepository repository, List<Command> commandList) {
         this.telegramBot = telegramBot;
         this.repository = repository;
+        this.getCommand = commandList.stream()
+            .map(c -> Map.entry(c.getType(), c))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @PostConstruct
@@ -39,35 +44,68 @@ public class BotApplication {
                     return;
                 }
                 long chatId = message.chat().id();
-                long userId = message.from().id();
-                if (message.entities() != null
-                        && Arrays.stream(message.entities())
-                                .map(MessageEntity::type)
-                                .toList()
-                                .contains(MessageEntity.Type.bot_command)) {
-                    CommandType commandType = CommandType.getCommand(message.text());
-                    if (commandType == null) {
-                        telegramBot.execute(
-                                new SendMessage(
-                                        chatId,
-                                        "Неизвестная команда. Воспользуйтесь /help, чтобы посмотреть список доступных команд."));
-                    } else {
-                        Command command = getCommand(commandType, chatId, userId);
-                        command.processCommand();
-                    }
+                if (!repository.isPresent(chatId) || repository.getState(chatId) == BotState.AWAITING_COMMAND) {
+                    processAwaitingCommandState(message, chatId);
                 } else {
-                    telegramBot.execute(new SendMessage(chatId, "Команды начинаются с /"));
+                    processAwaitingTagsState(message, chatId);
                 }
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
 
-    private Command getCommand(CommandType commandType, long chatId, long userId) {
-        return switch (commandType) {
-            case HELP -> new HelpCommand(telegramBot, repository, chatId, userId);
-            case START -> new StartCommand(telegramBot, repository, chatId, userId);
-        };
+    private void processAwaitingCommandState(Message message, long chatId) {
+        if (message.entities() != null
+            && Arrays.stream(message.entities())
+            .map(MessageEntity::type)
+            .toList()
+            .contains(MessageEntity.Type.bot_command)
+        ) {
+            List<String> args = Arrays.stream(message.text().split("\\s+")).toList();
+            CommandType commandType = CommandType.getCommandType(args.getFirst());
+            if (!repository.isPresent(chatId) && commandType != CommandType.START) {
+                sendMessage(chatId, "Для начала использования бота напишите /start");
+                return;
+            }
+
+            Command command = getCommand.get(commandType);
+            if (!command.validateArgs(chatId, args)) {
+                return;
+            }
+
+            if (commandType == CommandType.TRACK || commandType == CommandType.LIST) {
+                sendMessage(chatId, "Введите теги через запятую или -, если теги не нужны");
+                repository.setState(chatId, BotState.AWAITING_TAGS);
+                repository.setArgs(chatId, args);
+            } else {
+                command.processCommand(chatId, args);
+            }
+        }
+        else {
+            sendMessage(chatId, "Команды начинаются с /");
+        }
+    }
+
+    private void processAwaitingTagsState(Message message, long chatId) {
+        List<String> tags;
+        if (message.text().equals("-")) {
+            tags = List.of();
+        } else {
+            if (!message.text().matches("^\\s*[A-Za-zА-Яа-я]+(\\s*,\\s*[A-Za-zА-Яа-я]+)*\\s*$")) {
+                sendMessage(chatId, "Теги должны быть словами, разделенными запятыми, введите их еще раз");
+                return;
+            }
+            tags = Arrays.stream(message.text().trim().split("\\s*,\\s*")).toList();
+        }
+        repository.setTags(chatId, tags);
+        List<String> args = repository.getArgs(chatId);
+        CommandType commandType = CommandType.getCommandType(args.getFirst());
+        getCommand.get(commandType).processCommand(chatId, args);
+        repository.setState(chatId, BotState.AWAITING_COMMAND);
+    }
+
+    private void sendMessage(long chatId, String message) {
+        telegramBot.execute(new SendMessage(chatId, message));
     }
 
     static void main(String[] args) {

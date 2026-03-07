@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.exception;
 
-import backend.academy.linktracker.scrapper.dto.ApiError;
+import backend.academy.linktracker.commondto.ApiError;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;

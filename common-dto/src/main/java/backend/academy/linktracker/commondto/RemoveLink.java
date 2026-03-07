@@ -1,4 +1,4 @@
-package backend.academy.linktracker.scrapper.dto;
+package backend.academy.linktracker.commondto;
 
 import java.net.URI;
 

@@ -1,8 +1,8 @@
 package backend.academy.linktracker.scrapper.repository;
 
-import backend.academy.linktracker.scrapper.dto.AddLink;
-import backend.academy.linktracker.scrapper.dto.Link;
-import backend.academy.linktracker.scrapper.dto.RemoveLink;
+import backend.academy.linktracker.commondto.AddLink;
+import backend.academy.linktracker.commondto.Link;
+import backend.academy.linktracker.commondto.RemoveLink;
 import java.net.URI;
 import java.util.List;
 

@@ -8,8 +8,12 @@ import lombok.Getter;
 
 @Getter
 public enum CommandType {
+    UNKNOWN("", ""),
     START("/start", "Запуск бота"),
-    HELP("/help", "Доступные команды");
+    HELP("/help", "Доступные команды"),
+    TRACK("/track", "Начать отслеживание ссылки"),
+    UNTRACK("/untrack", "Прекратить отслеживание ссылки"),
+    LIST("/list", "Вывести список отслеживаемых ссылок");
 
     private final String name;
     private final String description;
@@ -22,7 +26,7 @@ public enum CommandType {
         this.description = description;
     }
 
-    public static CommandType getCommand(String name) {
-        return mapping.getOrDefault(name, null);
+    public static CommandType getCommandType(String name) {
+        return mapping.getOrDefault(name, UNKNOWN);
     }
 }

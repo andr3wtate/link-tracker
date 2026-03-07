@@ -1,9 +1,9 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.scrapper.dto.AddLink;
-import backend.academy.linktracker.scrapper.dto.Link;
-import backend.academy.linktracker.scrapper.dto.ListLinks;
-import backend.academy.linktracker.scrapper.dto.RemoveLink;
+import backend.academy.linktracker.commondto.AddLink;
+import backend.academy.linktracker.commondto.Link;
+import backend.academy.linktracker.commondto.ListLinks;
+import backend.academy.linktracker.commondto.RemoveLink;
 import backend.academy.linktracker.scrapper.exception.InvalidRequestParametersException;
 import backend.academy.linktracker.scrapper.exception.ItemAlreadyExistsException;
 import backend.academy.linktracker.scrapper.exception.ItemNotFoundException;
