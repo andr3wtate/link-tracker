@@ -3,7 +3,6 @@ package backend.academy.linktracker.bot.commands;
 import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.client.BotClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
-import backend.academy.linktracker.commondto.Link;
 import backend.academy.linktracker.commondto.ListLinks;
 import com.pengrad.telegrambot.TelegramBot;
 import org.springframework.stereotype.Component;
@@ -31,7 +30,7 @@ public class ListCommand extends BaseCommand {
         }
         List<String> tags = repository.getTags(chatId);
         List<String> ans = links.links().stream()
-            .filter(l -> l.tags().stream().anyMatch(tags::contains))
+            .filter(l -> tags.isEmpty() || l.tags().stream().anyMatch(tags::contains))
             .map(l -> l.url().toString())
             .toList();
         if (ans.isEmpty()) {

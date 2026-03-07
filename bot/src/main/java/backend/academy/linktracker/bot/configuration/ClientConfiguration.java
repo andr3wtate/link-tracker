@@ -3,6 +3,7 @@ package backend.academy.linktracker.bot.configuration;
 import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.client.BotClientException;
 import backend.academy.linktracker.commondto.ApiError;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
@@ -13,9 +14,13 @@ import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class ClientConfiguration {
+    @Value("${app.client.base-url}")
+    private String baseUrl;
+
     @Bean
     public RestClient restClient(ObjectMapper objectMapper) {
         return RestClient.builder()
+            .baseUrl(baseUrl)
             .defaultStatusHandler(HttpStatusCode::is4xxClientError,
                 (request, response) -> {
                     ApiError apiError = objectMapper.readValue(response.getBody(), ApiError.class);

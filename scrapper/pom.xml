@@ -190,7 +190,7 @@
         <dependency>
             <groupId>backend.academy.link-tracker</groupId>
             <artifactId>common-dto</artifactId>
-            <version>0.0.1</version>
+            <version>${revision}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

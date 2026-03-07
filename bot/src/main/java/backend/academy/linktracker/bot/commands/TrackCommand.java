@@ -4,7 +4,6 @@ import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.client.BotClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import backend.academy.linktracker.commondto.AddLink;
-import backend.academy.linktracker.commondto.Link;
 import com.pengrad.telegrambot.TelegramBot;
 import org.springframework.stereotype.Component;
 import java.net.URI;

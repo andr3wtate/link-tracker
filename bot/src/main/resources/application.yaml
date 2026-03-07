@@ -11,3 +11,6 @@ app:
     token: ${APP_TELEGRAM_TOKEN} # Use env variable. DO NOT KEEP TOKEN HERE
     update-listener-sleep: 1s
     debug: false
+  client:
+    base-url: http://localhost:8081
+
