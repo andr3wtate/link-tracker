@@ -1,7 +1,7 @@
 package backend.academy.linktracker.bot.commands;
 
 import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.bot.client.BotClientException;
+import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import backend.academy.linktracker.commondto.ListLinks;
 import com.pengrad.telegrambot.TelegramBot;
@@ -24,8 +24,9 @@ public class ListCommand extends BaseCommand {
         ListLinks links;
         try {
             links = botClient.getTrackedLinks(chatId);
-        } catch (BotClientException e) {
+        } catch (ClientException e) {
             notifyError(chatId, e.getApiError());
+            // todo логи
             return;
         }
         List<String> tags = repository.getTags(chatId);

@@ -56,6 +56,16 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
     }
 
     @Override
+    public List<URI> getAllLinks() {
+        return linkToChats.keySet().stream().toList();
+    }
+
+    @Override
+    public List<Long> getTrackingIds(URI link) {
+        return linkToChats.get(link).stream().toList();
+    }
+
+    @Override
     public Link addLinkByChatId(long chatId, AddLink newLink) {
         Link link = new Link(linkNumber++, newLink.link(), newLink.tags());
         chatToLinks.get(chatId).add(link);

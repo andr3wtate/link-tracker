@@ -1,7 +1,7 @@
 package backend.academy.linktracker.bot.commands;
 
 import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.bot.client.BotClientException;
+import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -31,9 +31,9 @@ public class StartCommand extends BaseCommand {
         }
         try {
             botClient.registerChat(chatId);
-        } catch (BotClientException e) {
+        } catch (ClientException e) {
             notifyError(chatId, e.getApiError());
-            sendMessage(chatId, String.format("Произошла ошибка: %s\n%s", e.getApiError().description(), e.getApiError().exceptionMessage()));
+            // todo логи
             return;
         }
         repository.addChat(chatId);

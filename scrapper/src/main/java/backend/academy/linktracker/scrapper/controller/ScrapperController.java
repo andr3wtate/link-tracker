@@ -6,6 +6,7 @@ import backend.academy.linktracker.commondto.ListLinks;
 import backend.academy.linktracker.commondto.RemoveLink;
 import backend.academy.linktracker.scrapper.service.ScrapperService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

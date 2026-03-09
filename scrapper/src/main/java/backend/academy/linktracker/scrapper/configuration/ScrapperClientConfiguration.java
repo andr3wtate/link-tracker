@@ -1,8 +1,9 @@
-package backend.academy.linktracker.bot.configuration;
+package backend.academy.linktracker.scrapper.configuration;
 
-import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.commondto.ApiError;
+import backend.academy.linktracker.commondto.ClientException;
+import backend.academy.linktracker.scrapper.client.ScrapperClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +14,12 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
-public class ClientConfiguration {
-    @Value("${app.client.base-url-for-scrapper}")
-    private String baseUrl;
+public class ScrapperClientConfiguration {
+    @Value("${app.client.base-url-for-bot}")
+    String baseUrl;
 
     @Bean
-    public RestClient restClient(ObjectMapper objectMapper) {
+    public RestClient getScrapperClient(ObjectMapper objectMapper) {
         return RestClient.builder()
             .baseUrl(baseUrl)
             .defaultStatusHandler(HttpStatusCode::is4xxClientError,
@@ -30,10 +31,10 @@ public class ClientConfiguration {
     }
 
     @Bean
-    public BotClient botClient(RestClient restClient) {
+    public ScrapperClient scrapperClient(@Qualifier("getScrapperClient") RestClient restClient) {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
             .builderFor(RestClientAdapter.create(restClient))
             .build();
-        return factory.createClient(BotClient.class);
+        return factory.createClient(ScrapperClient.class);
     }
 }

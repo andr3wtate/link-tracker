@@ -13,6 +13,8 @@ public interface ScrapperRepository {
     void registerChat(long chatId);
     void deleteChat(long chatId);
     List<Link> getLinksByChatId(long chatId);
+    List<URI> getAllLinks();
+    List<Long> getTrackingIds(URI link);
     Link addLinkByChatId(long chatId, AddLink newLink);
     Link deleteLinkByChatId(long chatId, RemoveLink link);
 }
