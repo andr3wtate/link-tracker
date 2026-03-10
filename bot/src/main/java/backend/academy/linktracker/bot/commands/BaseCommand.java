@@ -38,6 +38,10 @@ public abstract class BaseCommand implements Command {
     }
 
     protected void notifyError(long chatId, ApiError error) {
-        sendMessage(chatId, String.format("Произошла ошибка: %s\n%s", error.description(), error.exceptionMessage()));
+        sendMessage(chatId, String.format("Произошла ошибка: %s", error.description()));
+    }
+
+    protected void notifyError(long chatId, String message) {
+        sendMessage(chatId, String.format("Произошла ошибка: %s", message));
     }
 }

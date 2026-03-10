@@ -25,7 +25,7 @@ public class UntrackCommand extends BaseCommand {
         try {
             botClient.removeLinkTracking(chatId, new RemoveLink(URI.create(args.get(1))));
         } catch (ClientException e) {
-            notifyError(chatId, e.getApiError());
+            notifyError(chatId, "Ссылка не отслеживалась раннее");
             // todo логи
             return;
         }

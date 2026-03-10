@@ -26,7 +26,7 @@ public class TrackCommand extends BaseCommand {
         try {
             botClient.addLinkTracking(chatId, addLink);
         } catch (ClientException e) {
-            notifyError(chatId, e.getApiError());
+            notifyError(chatId, "Ссылка уже отслеживается");
             // todo логи
             return;
         }
