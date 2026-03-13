@@ -19,6 +19,6 @@ public class StackoverflowProperties {
     @NotEmpty
     private String key;
 
-    @NotEmpty
-    private String accessToken;
+//    @NotEmpty пока не нужен
+//    private String accessToken;
 }
