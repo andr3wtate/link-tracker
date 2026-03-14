@@ -8,13 +8,20 @@ import java.util.List;
 
 public interface ScrapperRepository {
     boolean isChatRegistered(long chatId);
+
     boolean chatContainsLink(long chatId, URI url);
 
     void registerChat(long chatId);
+
     void deleteChat(long chatId);
+
     List<Link> getLinksByChatId(long chatId);
+
     List<URI> getAllLinks();
+
     List<Long> getTrackingIds(URI link);
+
     Link addLinkByChatId(long chatId, AddLink newLink);
+
     Link deleteLinkByChatId(long chatId, RemoveLink link);
 }

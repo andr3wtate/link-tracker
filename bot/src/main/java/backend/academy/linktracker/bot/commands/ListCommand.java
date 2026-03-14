@@ -1,14 +1,16 @@
 package backend.academy.linktracker.bot.commands;
 
 import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
+import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.commondto.ListLinks;
 import com.pengrad.telegrambot.TelegramBot;
-import org.springframework.stereotype.Component;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class ListCommand extends BaseCommand {
     public ListCommand(TelegramBot telegramBot, BotRepository repository, BotClient botClient) {
         super(telegramBot, repository, botClient, 1);
@@ -26,14 +28,14 @@ public class ListCommand extends BaseCommand {
             links = botClient.getTrackedLinks(chatId);
         } catch (ClientException e) {
             notifyError(chatId, e.getApiError());
-            // todo логи
+            log.atWarn().addKeyValue("chatId", chatId).log("Error in bot client while getting tracked links");
             return;
         }
         List<String> tags = repository.getTags(chatId);
         List<String> ans = links.links().stream()
-            .filter(l -> tags.isEmpty() || l.tags().stream().anyMatch(tags::contains))
-            .map(l -> l.url().toString())
-            .toList();
+                .filter(l -> tags.isEmpty() || l.tags().stream().anyMatch(tags::contains))
+                .map(l -> l.url().toString())
+                .toList();
         if (ans.isEmpty()) {
             sendMessage(chatId, "Не найдена ни одна ссылка с такими тегами");
         } else {

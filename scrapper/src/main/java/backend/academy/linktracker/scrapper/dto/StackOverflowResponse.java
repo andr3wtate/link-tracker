@@ -5,7 +5,6 @@ import java.util.List;
 
 public record StackOverflowResponse(List<Item> items) {
     public record Item(
-        @JsonProperty("question_id") long questionId,
-        @JsonProperty("last_activity_date") long lastActivityDate
-    ) {}
+            @JsonProperty("question_id") long questionId,
+            @JsonProperty("last_activity_date") long lastActivityDate) {}
 }

@@ -3,7 +3,6 @@ package backend.academy.linktracker.scrapper.repository;
 import backend.academy.linktracker.commondto.AddLink;
 import backend.academy.linktracker.commondto.Link;
 import backend.academy.linktracker.commondto.RemoveLink;
-import org.springframework.stereotype.Repository;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class ScrapperRepositoryImpl implements ScrapperRepository {
@@ -29,8 +29,7 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
 
     @Override
     public boolean chatContainsLink(long chatId, URI url) {
-        return chatToLinks.get(chatId).stream()
-            .anyMatch(l -> l.url().equals(url));
+        return chatToLinks.get(chatId).stream().anyMatch(l -> l.url().equals(url));
     }
 
     @Override
@@ -40,6 +39,9 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
 
     @Override
     public void deleteChat(long chatId) {
+        if (chatToLinks.get(chatId) == null) {
+            return;
+        }
         for (Link link : chatToLinks.get(chatId)) {
             URI url = link.url();
             linkToChats.get(url).remove(chatId);

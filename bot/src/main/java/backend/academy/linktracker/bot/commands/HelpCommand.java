@@ -3,10 +3,9 @@ package backend.academy.linktracker.bot.commands;
 import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.SendMessage;
-import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class HelpCommand extends BaseCommand {
@@ -23,10 +22,11 @@ public class HelpCommand extends BaseCommand {
 
     @Override
     public void processCommand(long chatId, List<String> args) {
-        sendMessage(chatId,
-            Arrays.stream(CommandType.values())
-                .filter(commandType -> commandType != CommandType.UNKNOWN)
-                .map(c -> c.getName() + " - " + c.getDescription())
-                .reduce("", (s1, s2) -> s1 + s2 + "\n"));
+        sendMessage(
+                chatId,
+                Arrays.stream(CommandType.values())
+                        .filter(commandType -> commandType != CommandType.UNKNOWN)
+                        .map(c -> c.getName() + " - " + c.getDescription())
+                        .reduce("", (s1, s2) -> s1 + s2 + "\n"));
     }
 }

@@ -1,6 +1,11 @@
 package backend.academy.linktracker.scrapper.exception;
 
+import java.io.Serial;
+
 public class ItemAlreadyExistsException extends AbstractException {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final String DESCRIPTION = "Chat already exists or link is already tracked";
     private static final String CODE = "409";
 

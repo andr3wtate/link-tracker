@@ -5,8 +5,8 @@ import backend.academy.linktracker.bot.repository.BotRepository;
 import backend.academy.linktracker.commondto.ApiError;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
-import lombok.RequiredArgsConstructor;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class BaseCommand implements Command {
@@ -18,16 +18,12 @@ public abstract class BaseCommand implements Command {
     public boolean validateArgs(long chatId, List<String> args) {
         if (args.isEmpty()) {
             // unreachable
-            telegramBot.execute(new SendMessage(
-                chatId,
-                "Передано 0 аргументов"
-            ));
+            telegramBot.execute(new SendMessage(chatId, "Передано 0 аргументов"));
             return false;
         }
         if (args.size() != argsLength) {
             telegramBot.execute(new SendMessage(
-                chatId,
-                String.format("Команда %s принимает %d аргументов", args.getFirst(), argsLength - 1)));
+                    chatId, String.format("Команда %s принимает %d аргументов", args.getFirst(), argsLength - 1)));
             return false;
         }
         return true;

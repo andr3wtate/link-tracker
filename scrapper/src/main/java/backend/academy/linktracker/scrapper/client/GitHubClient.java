@@ -9,8 +9,7 @@ public interface GitHubClient {
 
     @GetExchange("/repos/{owner}/{repo}")
     ResponseEntity<Void> checkChanges(
-        @PathVariable String owner,
-        @PathVariable String repo,
-        @RequestHeader(value = "If-None-Match", required = false) String eTag
-    );
+            @PathVariable String owner,
+            @PathVariable String repo,
+            @RequestHeader(value = "If-None-Match", required = false) String eTag);
 }

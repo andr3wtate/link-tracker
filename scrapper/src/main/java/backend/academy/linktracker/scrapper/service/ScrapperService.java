@@ -8,9 +8,9 @@ import backend.academy.linktracker.scrapper.exception.InvalidRequestParametersEx
 import backend.academy.linktracker.scrapper.exception.ItemAlreadyExistsException;
 import backend.academy.linktracker.scrapper.exception.ItemNotFoundException;
 import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,6 @@ public class ScrapperService {
         checkIfChatRegistered(chatId);
         repository.deleteChat(chatId);
     }
-
 
     private void checkId(long id) {
         if (id < 0) {
@@ -55,7 +54,8 @@ public class ScrapperService {
         checkId(chatId);
         checkIfChatRegistered(chatId);
         if (repository.chatContainsLink(chatId, newLink.link())) {
-            throw new ItemAlreadyExistsException(String.format("Link %s is already tracked by chat %s", newLink.link(), chatId));
+            throw new ItemAlreadyExistsException(
+                    String.format("Link %s is already tracked by chat %s", newLink.link(), chatId));
         }
         return repository.addLinkByChatId(chatId, newLink);
     }

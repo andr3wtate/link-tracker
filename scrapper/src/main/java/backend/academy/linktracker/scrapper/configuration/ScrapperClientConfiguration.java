@@ -21,20 +21,18 @@ public class ScrapperClientConfiguration {
     @Bean
     public RestClient getScrapperClient(ObjectMapper objectMapper) {
         return RestClient.builder()
-            .baseUrl(baseUrl)
-            .defaultStatusHandler(HttpStatusCode::is4xxClientError,
-                (request, response) -> {
+                .baseUrl(baseUrl)
+                .defaultStatusHandler(HttpStatusCode::is4xxClientError, (request, response) -> {
                     ApiError apiError = objectMapper.readValue(response.getBody(), ApiError.class);
                     throw new ClientException(apiError);
                 })
-            .build();
+                .build();
     }
 
     @Bean
     public ScrapperClient scrapperClient(@Qualifier("getScrapperClient") RestClient restClient) {
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory
-            .builderFor(RestClientAdapter.create(restClient))
-            .build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient))
+                .build();
         return factory.createClient(ScrapperClient.class);
     }
 }

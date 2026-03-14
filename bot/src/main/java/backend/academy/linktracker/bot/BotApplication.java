@@ -10,6 +10,8 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.MessageEntity;
 import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class BotApplication {
         });
     }
 
-    private void processAwaitingCommandState(Message message, long chatId) {
+    void processAwaitingCommandState(Message message, long chatId) {
         if (message.entities() != null
             && Arrays.stream(message.entities())
             .map(MessageEntity::type)
@@ -74,24 +76,27 @@ public class BotApplication {
             }
 
             if (commandType == CommandType.TRACK || commandType == CommandType.LIST) {
+                if (commandType == CommandType.TRACK && !validateLink(args.get(1))) {
+                    sendMessage(chatId, "Некорректная ссылка");
+                    return;
+                }
                 sendMessage(chatId, "Введите теги через запятую или -, если теги не нужны");
                 repository.setState(chatId, BotState.AWAITING_TAGS);
                 repository.setArgs(chatId, args);
             } else {
                 command.processCommand(chatId, args);
             }
-        }
-        else {
+        } else {
             sendMessage(chatId, "Команды начинаются с /");
         }
     }
 
-    private void processAwaitingTagsState(Message message, long chatId) {
+    void processAwaitingTagsState(Message message, long chatId) {
         List<String> tags;
         if (message.text().equals("-")) {
             tags = List.of();
         } else {
-            if (!message.text().matches("^\\s*[A-Za-zА-Яа-я]+(\\s*,\\s*[A-Za-zА-Яа-я]+)*\\s*$")) {
+            if (!isValidTags(message.text())) {
                 sendMessage(chatId, "Теги должны быть словами, разделенными запятыми, введите их еще раз");
                 return;
             }
@@ -106,6 +111,34 @@ public class BotApplication {
 
     private void sendMessage(long chatId, String message) {
         telegramBot.execute(new SendMessage(chatId, message));
+    }
+
+    private boolean validateLink(String link) {
+        try {
+            URI.create(link).toURL();
+            return true;
+        } catch (IllegalArgumentException | MalformedURLException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidTags(String input) {
+        String trimmed = input.trim();
+        if (trimmed.equals("-")) {
+            return true;
+        }
+        String[] parts = trimmed.split("\\s*,\\s*");
+        for (String part : parts) {
+            if (part.isEmpty()) {
+                return false;
+            }
+            for (char c : part.toCharArray()) {
+                if (!Character.isLetter(c)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     static void main(String[] args) {

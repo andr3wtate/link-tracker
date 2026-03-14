@@ -1,6 +1,11 @@
 package backend.academy.linktracker.scrapper.exception;
 
+import java.io.Serial;
+
 public class InvalidRequestParametersException extends AbstractException {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final String DESCRIPTION = "Invalid request parameters";
     private static final String CODE = "400";
 

@@ -1,6 +1,11 @@
 package backend.academy.linktracker.scrapper.exception;
 
+import java.io.Serial;
+
 public class ItemNotFoundException extends AbstractException {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final String DESCRIPTION = "Chat doesn't exists or link not found";
     private static final String CODE = "404";
 

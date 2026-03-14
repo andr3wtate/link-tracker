@@ -15,17 +15,16 @@ public class GitHubClientConfiguration {
     @Bean
     public RestClient getGitHubRestClient(@Validated GithubProperties properties) {
         return RestClient.builder()
-            .baseUrl("https://api.github.com")
-            .defaultHeader("Accept", "application/vnd.github.v3+json")
-            .defaultHeader("Authorization", "Bearer " + properties.getToken())
-            .build();
+                .baseUrl("https://api.github.com")
+                .defaultHeader("Accept", "application/vnd.github.v3+json")
+                .defaultHeader("Authorization", "Bearer " + properties.getToken())
+                .build();
     }
 
     @Bean
     public GitHubClient gitHubClient(@Qualifier("getGitHubRestClient") RestClient restClient) {
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory
-            .builderFor(RestClientAdapter.create(restClient))
-            .build();
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(RestClientAdapter.create(restClient))
+                .build();
         return factory.createClient(GitHubClient.class);
     }
 }

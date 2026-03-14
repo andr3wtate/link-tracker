@@ -6,17 +6,19 @@ import backend.academy.linktracker.scrapper.client.GitHubClient;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.repository.CacheRepository;
 import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GitHubRepoMonitorService {
     private final ScrapperRepository scrapperRepository;
     private final GitHubClient gitHubClient;
@@ -24,7 +26,7 @@ public class GitHubRepoMonitorService {
     private final CacheRepository<URI, String> eTagRepository;
 
     @Scheduled(fixedRate = 5000)
-    private void checkChanges() {
+    public void checkChanges() {
         List<URI> links = scrapperRepository.getAllLinks();
         links.forEach(link -> {
             if (!link.getHost().equals("github.com")) {
@@ -33,7 +35,6 @@ public class GitHubRepoMonitorService {
             String eTag = eTagRepository.get(link);
             String[] ownerAndRepo = getOwnerAndRepo(link);
             if (ownerAndRepo == null) {
-                // todo логи
                 return;
             }
             try {
@@ -45,27 +46,30 @@ public class GitHubRepoMonitorService {
                     }
                     eTagRepository.set(link, response.getHeaders().getETag());
                     try {
-                        scrapperClient.sendUpdates(new LinkUpdate(0, link.toString(), "Изменение в репозитории", scrapperRepository.getTrackingIds(link)));
+                        scrapperClient.sendUpdates(new LinkUpdate(
+                                0,
+                                link.toString(),
+                                "Изменение в репозитории",
+                                scrapperRepository.getTrackingIds(link)));
                     } catch (ClientException e) {
-                        // todo логи
+                        log.atWarn().addKeyValue("link", link).log("Error in scrapper client while sending updates");
                     }
                 } else if (response.getStatusCode().value() != 304) {
-                    // todo логи
+                    log.atWarn().addKeyValue("link", link).log("Github response is not 304 or 200");
                 }
             } catch (HttpClientErrorException _) {
-
+                log.atWarn().addKeyValue("link", link).log("Error in gitHub client while checking changes");
             }
         });
     }
 
     private String[] getOwnerAndRepo(URI link) {
         String path = link.getPath();
-        List<String> parts = Arrays.stream(path.split("/"))
-            .filter(s -> !s.isEmpty())
-            .toList();
+        List<String> parts =
+                Arrays.stream(path.split("/")).filter(s -> !s.isEmpty()).toList();
         if (parts.size() < 2) {
             return null;
         }
-        return new String[]{parts.get(0), parts.get(1)};
+        return new String[] {parts.get(0), parts.get(1)};
     }
 }

@@ -18,19 +18,23 @@ public class GlobalExceptionHandler {
         HttpMessageNotReadableException.class
     })
     public ResponseEntity<@NotNull ApiError> handleInnerException(Exception e) {
-        return ResponseEntity.badRequest().body(
-            new ApiError("", "400", e.getClass().getSimpleName(),
-                e.getMessage(), ExceptionUtils.getStackTrace(e).lines().toList())
-        );
+        return ResponseEntity.badRequest()
+                .body(new ApiError(
+                        "",
+                        "400",
+                        e.getClass().getSimpleName(),
+                        e.getMessage(),
+                        ExceptionUtils.getStackTrace(e).lines().toList()));
     }
 
-    @ExceptionHandler({
-        AbstractException.class
-    })
+    @ExceptionHandler({AbstractException.class})
     public ResponseEntity<@NotNull ApiError> handleMyException(AbstractException e) {
-        return ResponseEntity.badRequest().body(
-            new ApiError(e.getDescription(), e.getCode(), e.getClass().getSimpleName(),
-                e.getMessage(), ExceptionUtils.getStackTrace(e).lines().toList())
-        );
+        return ResponseEntity.badRequest()
+                .body(new ApiError(
+                        e.getDescription(),
+                        e.getCode(),
+                        e.getClass().getSimpleName(),
+                        e.getMessage(),
+                        ExceptionUtils.getStackTrace(e).lines().toList()));
     }
 }

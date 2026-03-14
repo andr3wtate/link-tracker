@@ -1,13 +1,13 @@
 package backend.academy.linktracker.bot.commands;
 
 import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.commondto.ClientException;
 import backend.academy.linktracker.bot.repository.BotRepository;
+import backend.academy.linktracker.commondto.ClientException;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -33,12 +33,12 @@ public class StartCommand extends BaseCommand {
             botClient.registerChat(chatId);
         } catch (ClientException e) {
             notifyError(chatId, e.getApiError());
-            // todo логи
+            log.atWarn().addKeyValue("chatId", chatId).log("Error in bot client while registering chat");
             return;
         }
         repository.addChat(chatId);
         log.atInfo().addKeyValue("chatId", chatId).log("New user added");
-        telegramBot.execute(new SendMessage(
-                chatId, "Добро пожаловать! Используйте /help, чтобы посмотреть доступные команды."));
+        telegramBot.execute(
+                new SendMessage(chatId, "Добро пожаловать! Используйте /help, чтобы посмотреть доступные команды."));
     }
 }
