@@ -33,8 +33,8 @@ public class BotApplication {
         this.telegramBot = telegramBot;
         this.repository = repository;
         this.getCommand = commandList.stream()
-            .map(c -> Map.entry(c.getType(), c))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .map(c -> Map.entry(c.getType(), c))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @PostConstruct
@@ -58,11 +58,10 @@ public class BotApplication {
 
     void processAwaitingCommandState(Message message, long chatId) {
         if (message.entities() != null
-            && Arrays.stream(message.entities())
-            .map(MessageEntity::type)
-            .toList()
-            .contains(MessageEntity.Type.bot_command)
-        ) {
+                && Arrays.stream(message.entities())
+                        .map(MessageEntity::type)
+                        .toList()
+                        .contains(MessageEntity.Type.bot_command)) {
             List<String> args = Arrays.stream(message.text().split("\\s+")).toList();
             CommandType commandType = CommandType.getCommandType(args.getFirst());
             if (!repository.isPresent(chatId) && commandType != CommandType.START) {
