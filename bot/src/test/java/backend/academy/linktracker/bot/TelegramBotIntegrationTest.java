@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.properties.TelegramProperties;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -33,6 +34,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest
@@ -46,6 +48,9 @@ class TelegramBotIntegrationTest implements WithAssertions {
 
     @Autowired
     TelegramProperties telegramProperties;
+
+    @MockitoBean
+    BotClient client;
 
     @AfterEach
     void clearUpdatesListener() {
