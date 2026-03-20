@@ -10,6 +10,7 @@ import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import backend.academy.linktracker.scrapper.service.GitHubRepoMonitorService;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,7 +66,7 @@ class GitHubRepoMonitorServiceTest {
     void whenGitHubClientThrowsServerError_shouldNotCrash() {
         URI link = URI.create("https://github.com/user/repo");
         when(scrapperRepository.getAllLinks()).thenReturn(List.of(link));
-        when(eTagRepository.get(link)).thenReturn("some-etag");
+        when(eTagRepository.get(link)).thenReturn(Optional.of("some-etag"));
         doThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR))
                 .when(gitHubClient)
                 .checkChanges("user", "repo", "some-etag");

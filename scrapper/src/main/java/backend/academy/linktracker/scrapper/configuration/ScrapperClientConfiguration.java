@@ -1,7 +1,7 @@
 package backend.academy.linktracker.scrapper.configuration;
 
 import backend.academy.linktracker.commondto.ApiError;
-import backend.academy.linktracker.commondto.ClientException;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

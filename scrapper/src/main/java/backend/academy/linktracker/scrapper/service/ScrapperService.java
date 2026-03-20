@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class ScrapperService {
     private final ScrapperRepository repository;
 
-    public void registerChar(long chatId) {
+    public void registerChat(long chatId) {
         checkId(chatId);
         if (repository.isChatRegistered(chatId)) {
             throw new ItemAlreadyExistsException("Chat already exists: " + chatId);

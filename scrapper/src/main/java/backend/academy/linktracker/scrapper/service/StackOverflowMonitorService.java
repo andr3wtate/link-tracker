@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.ClientException;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.commondto.LinkUpdate;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.client.StackOverflowClient;
@@ -10,6 +10,7 @@ import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -47,12 +48,12 @@ public class StackOverflowMonitorService {
                         stackOverflowClient.checkChanges(id, "stackoverflow", STACK_OVERFLOW_KEY);
                 if (response.getStatusCode().is2xxSuccessful()) {
                     long lastActivity = response.getBody().items().getFirst().lastActivityDate();
-                    Long lastActivityStored = lastActivityRepository.get(id);
-                    if (lastActivityStored == null) {
+                    Optional<Long> lastActivityStored = lastActivityRepository.get(id);
+                    if (lastActivityStored.isEmpty()) {
                         lastActivityRepository.set(id, lastActivity);
                         return;
                     }
-                    if (lastActivityStored != lastActivity) {
+                    if (lastActivityStored.get() != lastActivity) {
                         lastActivityRepository.set(id, lastActivity);
                         try {
                             scrapperClient.sendUpdates(new LinkUpdate(

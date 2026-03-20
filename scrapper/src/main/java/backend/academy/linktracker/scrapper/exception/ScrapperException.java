@@ -2,11 +2,11 @@ package backend.academy.linktracker.scrapper.exception;
 
 import java.io.Serial;
 
-public abstract class AbstractException extends RuntimeException {
+public abstract class ScrapperException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public AbstractException(String message) {
+    public ScrapperException(String message) {
         super(message);
     }
 

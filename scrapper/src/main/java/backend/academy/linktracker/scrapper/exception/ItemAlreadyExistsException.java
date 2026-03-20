@@ -2,7 +2,7 @@ package backend.academy.linktracker.scrapper.exception;
 
 import java.io.Serial;
 
-public class ItemAlreadyExistsException extends AbstractException {
+public class ItemAlreadyExistsException extends ScrapperException {
     @Serial
     private static final long serialVersionUID = 1L;
 

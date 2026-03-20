@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.ClientException;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.commondto.LinkUpdate;
 import backend.academy.linktracker.scrapper.client.GitHubClient;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
@@ -9,6 +9,7 @@ import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +33,15 @@ public class GitHubRepoMonitorService {
             if (!link.getHost().equals("github.com")) {
                 return;
             }
-            String eTag = eTagRepository.get(link);
+            Optional<String> eTag = eTagRepository.get(link);
             String[] ownerAndRepo = getOwnerAndRepo(link);
             if (ownerAndRepo == null) {
                 return;
             }
             try {
-                ResponseEntity<Void> response = gitHubClient.checkChanges(ownerAndRepo[0], ownerAndRepo[1], eTag);
+                ResponseEntity<Void> response = gitHubClient.checkChanges(ownerAndRepo[0], ownerAndRepo[1], eTag.orElse(null));
                 if (response.getStatusCode().is2xxSuccessful()) {
-                    if (eTagRepository.get(link) == null) {
+                    if (eTagRepository.get(link).isEmpty()) {
                         eTagRepository.set(link, response.getHeaders().getETag());
                         return;
                     }

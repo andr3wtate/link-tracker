@@ -2,7 +2,7 @@ package backend.academy.linktracker.scrapper.exception;
 
 import java.io.Serial;
 
-public class ItemNotFoundException extends AbstractException {
+public class ItemNotFoundException extends ScrapperException {
     @Serial
     private static final long serialVersionUID = 1L;
 

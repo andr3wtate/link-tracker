@@ -60,8 +60,8 @@ public class BotApplication {
         if (message.entities() != null
                 && Arrays.stream(message.entities())
                         .map(MessageEntity::type)
-                        .toList()
-                        .contains(MessageEntity.Type.bot_command)) {
+                        .anyMatch(type -> type == MessageEntity.Type.bot_command)
+        ) {
             List<String> args = Arrays.stream(message.text().split("\\s+")).toList();
             CommandType commandType = CommandType.getCommandType(args.getFirst());
             if (!repository.isPresent(chatId) && commandType != CommandType.START) {
@@ -126,13 +126,14 @@ public class BotApplication {
         if (trimmed.equals("-")) {
             return true;
         }
-        String[] parts = trimmed.split("\\s*,\\s*");
+        String[] parts = trimmed.split(",");
         for (String part : parts) {
+            part = part.trim();
             if (part.isEmpty()) {
                 return false;
             }
             for (char c : part.toCharArray()) {
-                if (!Character.isLetter(c)) {
+                if (Character.isWhitespace(c)) {
                     return false;
                 }
             }

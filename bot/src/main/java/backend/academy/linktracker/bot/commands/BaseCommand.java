@@ -22,8 +22,7 @@ public abstract class BaseCommand implements Command {
             return false;
         }
         if (args.size() != argsLength) {
-            telegramBot.execute(new SendMessage(
-                    chatId, String.format("Команда %s принимает %d аргументов", args.getFirst(), argsLength - 1)));
+            notifyError(chatId, String.format("Команда %s принимает %d аргументов", args.getFirst(), argsLength - 1));
             return false;
         }
         return true;
@@ -34,7 +33,7 @@ public abstract class BaseCommand implements Command {
     }
 
     protected void notifyError(long chatId, ApiError error) {
-        sendMessage(chatId, String.format("Произошла ошибка: %s", error.description()));
+        notifyError(chatId, error.description());
     }
 
     protected void notifyError(long chatId, String message) {

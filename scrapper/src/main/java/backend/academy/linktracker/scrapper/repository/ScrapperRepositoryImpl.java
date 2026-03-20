@@ -34,7 +34,9 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
 
     @Override
     public void registerChat(long chatId) {
-        chatToLinks.put(chatId, new ArrayList<>());
+        if (!chatToLinks.containsKey(chatId)) {
+            chatToLinks.put(chatId, new ArrayList<>());
+        }
     }
 
     @Override
@@ -54,6 +56,9 @@ public class ScrapperRepositoryImpl implements ScrapperRepository {
 
     @Override
     public List<Link> getLinksByChatId(long chatId) {
+        if (chatToLinks.get(chatId) == null) {
+            return List.of();
+        }
         return chatToLinks.get(chatId).stream().toList();
     }
 

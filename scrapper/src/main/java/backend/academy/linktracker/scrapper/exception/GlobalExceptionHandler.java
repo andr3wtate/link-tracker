@@ -27,8 +27,8 @@ public class GlobalExceptionHandler {
                         ExceptionUtils.getStackTrace(e).lines().toList()));
     }
 
-    @ExceptionHandler({AbstractException.class})
-    public ResponseEntity<@NotNull ApiError> handleMyException(AbstractException e) {
+    @ExceptionHandler({ScrapperException.class})
+    public ResponseEntity<@NotNull ApiError> handleMyException(ScrapperException e) {
         return ResponseEntity.badRequest()
                 .body(new ApiError(
                         e.getDescription(),

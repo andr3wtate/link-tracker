@@ -1,5 +1,6 @@
-package backend.academy.linktracker.commondto;
+package backend.academy.linktracker.commondto.exceptions;
 
+import backend.academy.linktracker.commondto.ApiError;
 import lombok.Getter;
 
 @Getter

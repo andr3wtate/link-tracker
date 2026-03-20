@@ -21,7 +21,7 @@ public class ScrapperController {
 
     @PostMapping("/tg-chat/{id}")
     public void registerChat(@PathVariable("id") long chatId) {
-        service.registerChar(chatId);
+        service.registerChat(chatId);
     }
 
     @DeleteMapping("/tg-chat/{id}")
