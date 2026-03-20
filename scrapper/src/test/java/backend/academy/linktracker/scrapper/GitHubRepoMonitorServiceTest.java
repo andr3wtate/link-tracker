@@ -41,7 +41,7 @@ class GitHubRepoMonitorServiceTest {
     void whenGitHubClientThrowsNotFound_shouldNotCrash() {
         URI link = URI.create("https://github.com/user/repo");
         when(scrapperRepository.getAllLinks()).thenReturn(List.of(link));
-        when(eTagRepository.get(link)).thenReturn(null); // первый раз, ETag нет
+        when(eTagRepository.get(link)).thenReturn(Optional.empty()); // первый раз, ETag нет
         doThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND))
                 .when(gitHubClient)
                 .checkChanges("user", "repo", null);
