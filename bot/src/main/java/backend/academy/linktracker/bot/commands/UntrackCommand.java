@@ -2,8 +2,8 @@ package backend.academy.linktracker.bot.commands;
 
 import backend.academy.linktracker.bot.client.BotClient;
 import backend.academy.linktracker.bot.repository.BotRepository;
-import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.commondto.RemoveLink;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import com.pengrad.telegrambot.TelegramBot;
 import java.net.URI;
 import java.util.List;

@@ -1,7 +1,7 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.scrapper.client.GitHubClient;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.repository.CacheRepository;
@@ -39,7 +39,8 @@ public class GitHubRepoMonitorService {
                 return;
             }
             try {
-                ResponseEntity<Void> response = gitHubClient.checkChanges(ownerAndRepo[0], ownerAndRepo[1], eTag.orElse(null));
+                ResponseEntity<Void> response =
+                        gitHubClient.checkChanges(ownerAndRepo[0], ownerAndRepo[1], eTag.orElse(null));
                 if (response.getStatusCode().is2xxSuccessful()) {
                     if (eTagRepository.get(link).isEmpty()) {
                         eTagRepository.set(link, response.getHeaders().getETag());

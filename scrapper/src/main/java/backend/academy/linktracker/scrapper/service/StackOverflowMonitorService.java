@@ -1,7 +1,7 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.client.StackOverflowClient;
 import backend.academy.linktracker.scrapper.dto.StackOverflowResponse;
@@ -53,7 +53,7 @@ public class StackOverflowMonitorService {
                         lastActivityRepository.set(id, lastActivity);
                         return;
                     }
-                    if (lastActivityStored.get() != lastActivity) {
+                    if (lastActivityStored.orElseThrow() != lastActivity) {
                         lastActivityRepository.set(id, lastActivity);
                         try {
                             scrapperClient.sendUpdates(new LinkUpdate(

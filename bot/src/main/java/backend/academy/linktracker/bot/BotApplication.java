@@ -60,8 +60,7 @@ public class BotApplication {
         if (message.entities() != null
                 && Arrays.stream(message.entities())
                         .map(MessageEntity::type)
-                        .anyMatch(type -> type == MessageEntity.Type.bot_command)
-        ) {
+                        .anyMatch(type -> type == MessageEntity.Type.bot_command)) {
             List<String> args = Arrays.stream(message.text().split("\\s+")).toList();
             CommandType commandType = CommandType.getCommandType(args.getFirst());
             if (!repository.isPresent(chatId) && commandType != CommandType.START) {

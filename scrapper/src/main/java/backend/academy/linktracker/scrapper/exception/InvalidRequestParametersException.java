@@ -1,6 +1,5 @@
 package backend.academy.linktracker.scrapper.exception;
 
-import org.springframework.http.HttpStatusCode;
 import java.io.Serial;
 
 public class InvalidRequestParametersException extends ScrapperException {
