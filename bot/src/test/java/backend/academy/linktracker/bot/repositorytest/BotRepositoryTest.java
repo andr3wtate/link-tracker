@@ -12,23 +12,21 @@ import liquibase.Liquibase;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.resource.DirectoryResourceAccessor;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-@Testcontainers
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class BotRepositoryTest {
+public abstract class BotRepositoryTest {
 
-    @Container
     static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:15-alpine")
             .withDatabaseName("botdb")
             .withUsername("botuser")
@@ -47,6 +45,9 @@ public class BotRepositoryTest {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private BotRepository botRepository;
@@ -82,5 +83,11 @@ public class BotRepositoryTest {
         botRepository.addChat(chatId);
         assertThatNoException().isThrownBy(() -> botRepository.addChat(chatId));
         assertThat(botRepository.isPresent(chatId)).isTrue();
+    }
+
+    @AfterAll
+    void cleanDatabase() {
+        jdbcTemplate.execute(
+                "TRUNCATE TABLE bot_users, bot_users_sessions, uri_string_cache, string_long_cache, scrapper_users, links, subscriptions CASCADE");
     }
 }
