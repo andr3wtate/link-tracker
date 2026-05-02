@@ -1,9 +1,9 @@
 package backend.academy.linktracker.bot.client;
 
-import backend.academy.linktracker.commondto.AddLink;
-import backend.academy.linktracker.commondto.Link;
-import backend.academy.linktracker.commondto.ListLinks;
-import backend.academy.linktracker.commondto.RemoveLink;
+import backend.academy.linktracker.commondto.dto.AddLink;
+import backend.academy.linktracker.commondto.dto.Link;
+import backend.academy.linktracker.commondto.dto.ListLinks;
+import backend.academy.linktracker.commondto.dto.RemoveLink;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;

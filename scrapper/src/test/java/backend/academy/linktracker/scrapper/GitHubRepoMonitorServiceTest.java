@@ -2,7 +2,7 @@ package backend.academy.linktracker.scrapper;
 
 import static org.mockito.Mockito.*;
 
-import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import backend.academy.linktracker.scrapper.client.GitHubClient;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.repository.CacheRepository;

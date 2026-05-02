@@ -2,9 +2,9 @@ package backend.academy.linktracker.scrapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import backend.academy.linktracker.commondto.AddLink;
-import backend.academy.linktracker.commondto.Link;
-import backend.academy.linktracker.commondto.ListLinks;
+import backend.academy.linktracker.commondto.dto.AddLink;
+import backend.academy.linktracker.commondto.dto.Link;
+import backend.academy.linktracker.commondto.dto.ListLinks;
 import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import java.net.URI;
 import java.util.List;

@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
 import backend.academy.linktracker.scrapper.client.StackOverflowClient;
@@ -60,7 +60,7 @@ public class StackOverflowMonitorService {
                                     0,
                                     link.toString(),
                                     "Изменение в вопросе",
-                                    scrapperRepository.getTrackingIds(link)));
+                                    scrapperRepository.getTrackingTgChatIds(link)));
                         } catch (ClientException e) {
                             log.atWarn()
                                     .addKeyValue("link", link)

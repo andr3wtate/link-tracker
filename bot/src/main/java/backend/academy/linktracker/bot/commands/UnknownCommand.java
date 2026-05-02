@@ -12,7 +12,7 @@ public class UnknownCommand extends BaseCommand {
     private static final CommandType type = CommandType.UNKNOWN;
 
     public UnknownCommand(TelegramBot telegramBot, BotRepository repository, BotClient botClient) {
-        super(telegramBot, repository, botClient, 0);
+        super(telegramBot, repository, botClient, 1);
     }
 
     @Override

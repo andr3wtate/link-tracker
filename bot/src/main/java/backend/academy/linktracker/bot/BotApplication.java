@@ -20,9 +20,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
+@EntityScan("backend.academy.linktracker.commondto.entity")
 @Slf4j
 public class BotApplication {
     private final TelegramBot telegramBot;

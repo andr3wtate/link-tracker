@@ -1,7 +1,7 @@
 package backend.academy.linktracker.bot.configuration;
 
 import backend.academy.linktracker.bot.client.BotClient;
-import backend.academy.linktracker.commondto.ApiError;
+import backend.academy.linktracker.commondto.dto.ApiError;
 import backend.academy.linktracker.commondto.exceptions.ClientException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.service;
 
-import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import backend.academy.linktracker.commondto.exceptions.ClientException;
 import backend.academy.linktracker.scrapper.client.GitHubClient;
 import backend.academy.linktracker.scrapper.client.ScrapperClient;
@@ -52,7 +52,7 @@ public class GitHubRepoMonitorService {
                                 0,
                                 link.toString(),
                                 "Изменение в репозитории",
-                                scrapperRepository.getTrackingIds(link)));
+                                scrapperRepository.getTrackingTgChatIds(link)));
                     } catch (ClientException e) {
                         log.atWarn().addKeyValue("link", link).log("Error in scrapper client while sending updates");
                     }

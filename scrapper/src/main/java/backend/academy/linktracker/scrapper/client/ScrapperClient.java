@@ -1,6 +1,6 @@
 package backend.academy.linktracker.scrapper.client;
 
-import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.PostExchange;
 

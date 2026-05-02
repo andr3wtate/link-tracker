@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import backend.academy.linktracker.bot.repository.BotRepository;
-import backend.academy.linktracker.commondto.LinkUpdate;
+import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import com.pengrad.telegrambot.TelegramBot;
 import java.util.List;
 import java.util.Map;
