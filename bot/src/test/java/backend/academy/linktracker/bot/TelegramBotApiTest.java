@@ -1,10 +1,13 @@
 package backend.academy.linktracker.bot;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import backend.academy.linktracker.bot.controller.BotController;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import backend.academy.linktracker.commondto.dto.LinkUpdate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pengrad.telegrambot.TelegramBot;
 import java.util.List;
 import java.util.Map;
@@ -15,21 +18,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.web.client.RestClient;
+import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(BotController.class)
 class TelegramBotApiTest {
 
-    @LocalServerPort
-    private int port;
+    @Autowired
+    private MockMvc mockMvc;
 
-    private RestClient restClient;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
     private BotRepository botRepository;
@@ -41,34 +42,27 @@ class TelegramBotApiTest {
 
     @BeforeEach
     void setUp() {
-        restClient = RestClient.builder().baseUrl("http://localhost:" + port).build();
-
         when(botRepository.isPresent(chatId)).thenReturn(true);
     }
 
     @Test
-    void validUpdate_shouldReturn200() {
+    void validUpdate_shouldReturn200() throws Exception {
         LinkUpdate linkUpdate =
                 new LinkUpdate(chatId, "https://github.com/user/repo", "Изменение в репозитории", List.of(123L));
 
-        ResponseEntity<Void> response =
-                restClient.post().uri("/updates").body(linkUpdate).retrieve().toBodilessEntity();
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        mockMvc.perform(post("/updates")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(linkUpdate)))
+                .andExpect(status().isOk());
     }
 
     @ParameterizedTest
     @MethodSource("requestProvider")
-    void invalidUpdate_shouldNotReturn200(Map<String, Objects> body) {
-        ResponseEntity<Void> response = restClient
-                .post()
-                .uri("/updates")
-                .body(body)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {})
-                .toBodilessEntity();
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    void invalidUpdate_shouldNotReturn200(Map<String, Objects> body) throws Exception {
+        mockMvc.perform(post("/updates")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(body)))
+                .andExpect(status().isBadRequest());
     }
 
     static Stream<Arguments> requestProvider() {

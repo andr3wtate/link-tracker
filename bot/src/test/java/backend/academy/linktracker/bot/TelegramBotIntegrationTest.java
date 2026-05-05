@@ -34,7 +34,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.wiremock.spring.EnableWireMock;
 
 @SpringBootTest
@@ -42,6 +45,15 @@ import org.wiremock.spring.EnableWireMock;
 @ActiveProfiles("test")
 @EnableWireMock
 class TelegramBotIntegrationTest implements WithAssertions {
+
+    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:15-alpine")
+            .withDatabaseName("botdb")
+            .withUsername("botuser")
+            .withPassword("botpass");
+
+    static {
+        postgres.start();
+    }
 
     @Autowired
     TelegramBot telegramBot;
@@ -51,6 +63,13 @@ class TelegramBotIntegrationTest implements WithAssertions {
 
     @MockitoBean
     BotClient client;
+
+    @DynamicPropertySource
+    static void properties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
 
     @AfterEach
     void clearUpdatesListener() {

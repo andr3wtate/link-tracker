@@ -18,12 +18,24 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestClient;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
-@TestPropertySource(properties = {"STACKOVERFLOW_KEY=mock"})
+@TestPropertySource(properties = {"STACKOVERFLOW_KEY=mock", "app.access-type=in-memory"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ScrapperApiTest {
+
+    static PostgreSQLContainer postres = new PostgreSQLContainer("postgres:15-alpine")
+            .withDatabaseName("botdb")
+            .withUsername("botuser")
+            .withPassword("botpass");
+
+    static {
+        postres.start();
+    }
 
     @LocalServerPort
     private int port;
@@ -32,6 +44,13 @@ class ScrapperApiTest {
 
     @Autowired
     private ScrapperRepository scrapperRepository;
+
+    @DynamicPropertySource
+    static void dynamicProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postres::getJdbcUrl);
+        registry.add("spring.datatource.username", postres::getUsername);
+        registry.add("spring.datasource.password", postres::getPassword);
+    }
 
     @BeforeEach
     void setUp() {
