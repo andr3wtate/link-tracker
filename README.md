@@ -5,15 +5,19 @@ LinkTracker – Telegram-бот, который отслеживает изме�
 # Запуск бота
 
 ## 1. Запустить БД и миграции
+
 ```bash
 docker-compose up -d
 ```
 
 ## 2. Указать переменные окружения
-| Приложение               | Переменная              |
-|:-------------------------|:------------------------| 
-| ```BotApplication```     | ```BOT_TOKEN```         |
-| ```ScrapperApplication```| ```GITHUB_TOKEN```      |
-| ```ScrapperApplication```| ```STACKOVERFLOW_KEY``` |
+
+| Приложение                | Переменная              |
+|:--------------------------|:------------------------|
+| ```BotApplication```      | ```BOT_TOKEN```         |
+| ```ScrapperApplication``` | ```GITHUB_TOKEN```      |
+| ```ScrapperApplication``` | ```STACKOVERFLOW_KEY``` |
+
 ## 3. Запустить оба приложения
+
 Удобнее всего через запуск в Idea (там и указать переменные окружения)
