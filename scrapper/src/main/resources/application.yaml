@@ -30,4 +30,9 @@ app:
     token: ${GITHUB_TOKEN} # Use env variable. DO NOT KEEP TOKEN HERE
   client:
     base-url-for-bot: http://localhost:8080
-  access-type: ORM
+  access-type: SQL
+  messaging-type: http
+  monitor-service:
+    batch-size: 1000
+    launch-interval: 10000 # in ms
+    threads: 4

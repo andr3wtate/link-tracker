@@ -12,6 +12,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import jakarta.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class BotApplication {
 
             if (commandType == CommandType.TRACK || commandType == CommandType.LIST) {
                 if (commandType == CommandType.TRACK && !validateLink(args.get(1))) {
-                    sendMessage(chatId, "Некорректная ссылка");
+                    sendMessage(chatId, "Некорректная ссылка, поддерживаются ссылки github и stackoverflow");
                     return;
                 }
                 sendMessage(chatId, "Введите теги через запятую или -, если теги не нужны");
@@ -115,8 +116,8 @@ public class BotApplication {
 
     private boolean validateLink(String link) {
         try {
-            URI.create(link).toURL();
-            return true;
+            URL url = URI.create(link).toURL();
+            return url.getHost().equals("github.com") || url.getHost().equals("stackoverflow.com");
         } catch (IllegalArgumentException | MalformedURLException e) {
             return false;
         }

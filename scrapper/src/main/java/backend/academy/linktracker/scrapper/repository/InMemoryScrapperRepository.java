@@ -3,7 +3,9 @@ package backend.academy.linktracker.scrapper.repository;
 import backend.academy.linktracker.commondto.dto.AddLink;
 import backend.academy.linktracker.commondto.dto.Link;
 import backend.academy.linktracker.commondto.dto.RemoveLink;
+import backend.academy.linktracker.scrapper.dto.LinkForMonitorService;
 import java.net.URI;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -67,6 +69,21 @@ public class InMemoryScrapperRepository implements ScrapperRepository {
     @Override
     public List<URI> getAllLinks() {
         return linkToChats.keySet().stream().toList();
+    }
+
+    @Override
+    public void deleteLink(long linkId) {
+        throw new IllegalStateException("Not implemented in in-memory repo");
+    }
+
+    @Override
+    public List<LinkForMonitorService> getLinksBatch(long lastLinkId, int batchSize) {
+        throw new IllegalStateException("Not implemented in in-memory repo");
+    }
+
+    @Override
+    public void updateLastCheckTime(long linkId, Instant time) {
+        throw new IllegalStateException("Not implemented in in-memory repo");
     }
 
     @Override

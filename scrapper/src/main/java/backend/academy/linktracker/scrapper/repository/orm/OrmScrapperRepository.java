@@ -6,11 +6,15 @@ import backend.academy.linktracker.commondto.dto.RemoveLink;
 import backend.academy.linktracker.commondto.entity.LinkEntity;
 import backend.academy.linktracker.commondto.entity.ScrapperUser;
 import backend.academy.linktracker.commondto.entity.Subscription;
+import backend.academy.linktracker.scrapper.dto.LinkForMonitorService;
 import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +68,24 @@ public class OrmScrapperRepository implements ScrapperRepository {
         return linkRepository.findAll().stream()
                 .map(l -> URI.create(l.getUrl()))
                 .toList();
+    }
+
+    @Override
+    public void deleteLink(long linkId) {
+        linkRepository.deleteById(linkId);
+    }
+
+    @Override
+    public List<LinkForMonitorService> getLinksBatch(long lastLinkId, int batchSize) {
+        Pageable pageable = PageRequest.of(0, batchSize);
+        return linkRepository.findLinksBatch(lastLinkId, pageable).stream()
+                .map(e -> new LinkForMonitorService(e.getId(), URI.create(e.getUrl()), e.getLastCheck()))
+                .toList();
+    }
+
+    @Override
+    public void updateLastCheckTime(long linkId, Instant time) {
+        linkRepository.updateLastCheckTime(linkId, time);
     }
 
     @Override

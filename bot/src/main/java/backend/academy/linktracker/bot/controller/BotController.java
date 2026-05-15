@@ -25,7 +25,7 @@ public class BotController {
         }
         for (long chatId : update.tgChatIds()) {
             telegramBot.execute(new SendMessage(
-                    chatId, String.format("Изменение в ссылке %s: %n%s", update.url(), update.description())));
+                    chatId, String.format("Уведомление по ссылке %s: %n%s", update.url(), update.description())));
         }
         return ResponseEntity.ok().build();
     }

@@ -23,6 +23,9 @@ public class LinkEntity {
     @Column(name = "url", nullable = false, unique = true)
     private String url;
 
+    @Column(name = "last_check", nullable = false)
+    private Instant lastCheck;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private Instant createdAt;
 }

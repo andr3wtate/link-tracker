@@ -30,5 +30,5 @@ app:
     debug: false
   client:
     base-url-for-scrapper: ${SCRAPPER_BASE_URL:http://localhost:8081}
-  access-type: ORM
+  access-type: SQL
 

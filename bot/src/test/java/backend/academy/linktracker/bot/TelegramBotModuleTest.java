@@ -116,6 +116,7 @@ class TelegramBotModuleTest {
         verify(telegramBot).execute(captor.capture());
 
         SendMessage sent = captor.getValue();
-        assertThat(sent.getParameters().get("text")).isEqualTo("Некорректная ссылка");
+        assertThat(sent.getParameters().get("text"))
+                .isEqualTo("Некорректная ссылка, поддерживаются ссылки github и stackoverflow");
     }
 }

@@ -3,9 +3,12 @@ package backend.academy.linktracker.scrapper.repository.sql;
 import backend.academy.linktracker.commondto.dto.AddLink;
 import backend.academy.linktracker.commondto.dto.Link;
 import backend.academy.linktracker.commondto.dto.RemoveLink;
+import backend.academy.linktracker.scrapper.dto.LinkForMonitorService;
 import backend.academy.linktracker.scrapper.repository.ScrapperRepository;
 import java.net.URI;
 import java.sql.Array;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -89,6 +92,42 @@ public class SqlScrapperRepository implements ScrapperRepository {
     public List<URI> getAllLinks() {
         String sql = "SELECT url FROM links";
         return jdbcTemplate.query(sql, (rs, rowNum) -> URI.create(rs.getString("url")));
+    }
+
+    @Override
+    public void deleteLink(long linkId) {
+        String sql = """
+            DELETE FROM links l
+            WHERE l.id = ?
+            """;
+        jdbcTemplate.update(sql, linkId);
+    }
+
+    @Override
+    public List<LinkForMonitorService> getLinksBatch(long lastLinkId, int batchSize) {
+        String sql = """
+            SELECT l.id, l.url, l.last_check FROM links l
+            WHERE l.id > ?
+            ORDER BY id
+            LIMIT ?
+            """;
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new LinkForMonitorService(
+                        rs.getLong("id"),
+                        URI.create(rs.getString("url")),
+                        rs.getTimestamp("last_check").toInstant()),
+                lastLinkId,
+                batchSize);
+    }
+
+    @Override
+    public void updateLastCheckTime(long linkId, Instant time) {
+        String sql = """
+            UPDATE links SET last_check = ?
+            WHERE id = ?
+            """;
+        jdbcTemplate.update(sql, Timestamp.from(time), linkId);
     }
 
     @Override

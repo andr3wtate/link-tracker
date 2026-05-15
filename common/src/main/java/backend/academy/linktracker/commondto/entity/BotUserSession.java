@@ -3,11 +3,7 @@ package backend.academy.linktracker.commondto.entity;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -24,12 +20,8 @@ import org.hibernate.annotations.Type;
 @Table(name = "bot_users_sessions")
 public class BotUserSession {
     @Id
+    @Column(name = "chat_id")
     private Long chatId;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "chat_id")
-    private BotUser user;
 
     @Column(name = "chat_state", nullable = false)
     private String chatState;
@@ -45,7 +37,7 @@ public class BotUserSession {
     @Column(name = "updated_at", insertable = false, updatable = false)
     private Instant updatedAt;
 
-    public BotUserSession(BotUser user) {
-        this.user = user;
+    public BotUserSession(Long chatId) {
+        this.chatId = chatId;
     }
 }

@@ -48,7 +48,7 @@ class TelegramBotApiTest {
     @Test
     void validUpdate_shouldReturn200() throws Exception {
         LinkUpdate linkUpdate =
-                new LinkUpdate(chatId, "https://github.com/user/repo", "Изменение в репозитории", List.of(123L));
+                new LinkUpdate("https://github.com/user/repo", "Изменение в репозитории", List.of(123L));
 
         mockMvc.perform(post("/updates")
                         .contentType(MediaType.APPLICATION_JSON)

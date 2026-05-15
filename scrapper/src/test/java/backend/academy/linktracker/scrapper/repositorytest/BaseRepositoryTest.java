@@ -1,7 +1,6 @@
 package backend.academy.linktracker.scrapper.repositorytest;
 
-import backend.academy.linktracker.scrapper.service.GitHubRepoMonitorService;
-import backend.academy.linktracker.scrapper.service.StackOverflowMonitorService;
+import backend.academy.linktracker.scrapper.service.MonitorService;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import javax.sql.DataSource;
@@ -48,10 +47,7 @@ public abstract class BaseRepositoryTest {
     protected JdbcTemplate jdbcTemplate;
 
     @MockitoBean
-    private GitHubRepoMonitorService gitHubRepoMonitorService;
-
-    @MockitoBean
-    private StackOverflowMonitorService stackOverflowMonitorService;
+    private MonitorService monitorService;
 
     @BeforeAll
     void applyMigrations() throws Exception {

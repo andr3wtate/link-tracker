@@ -44,13 +44,13 @@ public class OrmBotRepository implements BotRepository {
     @Override
     @Transactional
     public void setState(long chatId, BotState state) {
-        BotUser user = botUserRepository.findByChatId(chatId).orElseGet(() -> {
+        botUserRepository.findByChatId(chatId).orElseGet(() -> {
             BotUser newUser = new BotUser();
             newUser.setChatId(chatId);
             return botUserRepository.save(newUser);
         });
 
-        BotUserSession session = botUserSessionRepository.findById(chatId).orElseGet(() -> new BotUserSession(user));
+        BotUserSession session = botUserSessionRepository.findById(chatId).orElseGet(() -> new BotUserSession(chatId));
 
         session.setChatState(state.name());
         botUserSessionRepository.save(session);
