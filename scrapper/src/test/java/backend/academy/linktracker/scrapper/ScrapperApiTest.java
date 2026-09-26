@@ -24,7 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestClient;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 
-@TestPropertySource(properties = {"STACKOVERFLOW_KEY=mock", "app.access-type=in-memory"})
+@TestPropertySource(properties = {"STACKOVERFLOW_KEY=mock", "app.access-type=in-memory", "app.messaging-type=http"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ScrapperApiTest {
 

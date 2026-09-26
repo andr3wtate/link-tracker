@@ -4,6 +4,19 @@ server:
 spring:
   application:
     name: scrapper
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092,localhost:29092,localhost:39092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+        spring.json.add.type.headers: false
+    admin:
+      fail-fast: true
+
+
 
   datasource:
     url: jdbc:postgresql://localhost:5432/botdb
@@ -31,7 +44,9 @@ app:
   client:
     base-url-for-bot: http://localhost:8080
   access-type: SQL
-  messaging-type: http
+  messaging-type: kafka
+  kafka:
+    topic: link-updates
   monitor-service:
     batch-size: 1000
     launch-interval: 10000 # in ms

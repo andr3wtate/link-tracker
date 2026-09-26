@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import backend.academy.linktracker.bot.controller.BotController;
+import backend.academy.linktracker.bot.service.UpdateService;
 import backend.academy.linktracker.bot.repository.BotRepository;
 import backend.academy.linktracker.commondto.dto.LinkUpdate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(BotController.class)
+@org.springframework.context.annotation.Import(UpdateService.class)
 class TelegramBotApiTest {
 
     @Autowired
